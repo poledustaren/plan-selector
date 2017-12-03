@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="" content="">
+        
+        <title>Snap</title>
+        <style media="screen">
+       body {
+        background: white;
+       }            
+        </style>
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.contextMenu.min.js"></script>        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.contextMenu.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.ui.position.min.js"></script>
+      
+        
+        <script src="./dist/snap.svg-min.js"></script>
+        <script src = "./Scripts/main.js" ></script>
+   
+    </head>
+    <body>
+    @model PlanFloor
+    @{
+    var image = Model.Images.FirstOrDefault(c1 => c1.Identifier == "image" && c1.Crop);
+    var imagePath = image!= null ? image.GetPath("crop"):"";
+    var height = "100%";//@image.Height
+    var width = "100%";//@image.Width
+    var listResidentials = Model.PlanApartmentsCollection.OrderBy(c => c.Position).ToList();
+
+
+
+    }
+    @*<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>*@
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.contextMenu.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.contextMenu.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.ui.position.min.js"></script>*@
+
+
+    <script src="/Scripts/Selector/dist/snap.svg-min.js"></script>
+    <script src="/Scripts/Selector/Scripts/main.js"></script>
+    @if (image != null)
+    {
+    <div data-path_to_image="@imagePath"
+         id="wells-selector-info"
+         class="svg_selection" >
+        <svg 
+            id="plan-body"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="1.1"
+            x="0px"
+            y="0px"
+            xml:space="preserve"
+            width="@image.Width"
+            height="@image.Height"
+            viewBox= "0 0 @image.Width @image.Height"
+        >
+            <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="@imagePath" preserveAspectRatio="none" x="0" y="0" id="imgForSelection" width="@image.Width" height="@image.Height"></image>
+        </svg>
+    </div>
+    if (listResidentials.Any())
+    {
+    <input type="button" id="SVG" value="Сохранить выделенную область" />
+    <input type="button" id="save_area_svg" value="Сохранить выделенную область" />
+    <br />
+    <br />
+    }
+
+    <div id="plansList" data-forsave="[]">
+
+        @foreach (var item in listResidentials)
+        {
+        image = item.PlanApartment.Images.FirstOrDefault(c1 => c1.Identifier == "residentialplan" && c1.Crop);
+
+        <div class="img svg_plan_item" data-id="@(item.Id)" data-title="@(item.Title)">
+            <span>@item.Title</span>
+            <br />
+            @if (image != null)
+            {
+            <img src="@image.GetPath("crop")" />
+            }
+            else
+            {
+            <div>фото не загружено</div>
+            }
+
+        </div>
+        }
+
+
+        @if (!listResidentials.Any())
+        {
+        <div>Для данного объекта не выбрано ни одной дочерней планировки</div>
+        }
+    </div>
+   
+
+
+    <style>
+        .option_button.pushed {
+            transition: fill 200ms ease;
+            opacity: 0.8;
+            fill: #06244d;
+        }
+
+        .option_button {
+            transition: fill 200ms ease;
+            opacity: 0.8;
+            fill: #1577ff;
+            stroke: #ffffff;
+        }
+        .not_binded{
+            fill: "#2d8816"
+        }
+        .need_bind{
+            fill: #881216;
+        }
+        .alrady_beended{
+            fill: #8f8fea;
+        }
+        .svg_plan_item {
+            float: left;
+            cursor: pointer;
+            width: 400px;
+            min-height: 120px;
+            margin: 5px;
+            padding: 3px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .svg_plan_item.item_binded{
+            color: blue;
+            border: 6px solid #8f8fea;
+        }
+    </style>
+    </body>
+</html>
