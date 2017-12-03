@@ -22,30 +22,20 @@
    
     </head>
     <body>
-    @model PlanFloor
-    @{
-    var image = Model.Images.FirstOrDefault(c1 => c1.Identifier == "image" && c1.Crop);
-    var imagePath = image!= null ? image.GetPath("crop"):"";
-    var height = "100%";//@image.Height
-    var width = "100%";//@image.Width
-    var listResidentials = Model.PlanApartmentsCollection.OrderBy(c => c.Position).ToList();
-
-
-
-    }
-    @*<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>*@
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.contextMenu.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.contextMenu.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.contextMenu.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.4.2/jquery.ui.position.min.js"></script>*@
 
 
     <script src="/Scripts/Selector/dist/snap.svg-min.js"></script>
     <script src="/Scripts/Selector/Scripts/main.js"></script>
-    @if (image != null)
-    {
+    
     <div data-path_to_image="@imagePath"
          id="wells-selector-info"
          class="svg_selection" >
+        <img src="test.jpg" preserveAspectRatio="none" x="0" y="0" id="imgForSelection" width="" height=""/>
         <svg 
             id="plan-body"
             xmlns="http://www.w3.org/2000/svg"
@@ -56,45 +46,36 @@
             xml:space="preserve"
             width="@image.Width"
             height="@image.Height"
-            viewBox= "0 0 @image.Width @image.Height"
-        >
-            <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="@imagePath" preserveAspectRatio="none" x="0" y="0" id="imgForSelection" width="@image.Width" height="@image.Height"></image>
+            viewBox= "0 0 @image.Width @image.Height">
+            <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="test.jpg" preserveAspectRatio="none" x="0" y="0" id="imgForSelection" width="" height=""></image>
         </svg>
     </div>
-    if (listResidentials.Any())
-    {
-    <input type="button" id="SVG" value="Сохранить выделенную область" />
-    <input type="button" id="save_area_svg" value="Сохранить выделенную область" />
+   
+    <input type="button" id="SVGCoords" value="Output" />
+    <input type="button" id="save_area_svg" value="SaveAreas" />
     <br />
-    <br />
-    }
+    <br />    
 
-    <div id="plansList" data-forsave="[]">
+    
 
-        @foreach (var item in listResidentials)
-        {
-        image = item.PlanApartment.Images.FirstOrDefault(c1 => c1.Identifier == "residentialplan" && c1.Crop);
+       
 
-        <div class="img svg_plan_item" data-id="@(item.Id)" data-title="@(item.Title)">
+        <div class="img svg_plan_item" data-id="22" data-title="Element">
             <span>@item.Title</span>
             <br />
-            @if (image != null)
-            {
-            <img src="@image.GetPath("crop")" />
-            }
-            else
-            {
+            
+            <img src="" />
+         
             <div>фото не загружено</div>
-            }
+           
 
         </div>
-        }
+        
 
 
-        @if (!listResidentials.Any())
-        {
+   
         <div>Для данного объекта не выбрано ни одной дочерней планировки</div>
-        }
+       
     </div>
    
 
